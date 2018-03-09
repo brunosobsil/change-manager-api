@@ -5,7 +5,7 @@ var JwtStrategy = passportJWT.Strategy;
 
 var jwtOptions = {};
 
-jwtOptions.jwtFromRequest = ExtractJwt.fromHeader();
+jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 jwtOptions.secretOrKey = 'senhadeteste';
 
 var strategy = new JwtStrategy(jwtOptions, function(analista, next){
