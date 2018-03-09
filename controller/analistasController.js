@@ -30,7 +30,6 @@ router.put('/analistas', function(req,res){
 });
 
 // DELETE
-
 router.delete('/analistas', function(req,res){
 
     var ret = dao.excluir(req.body,function(ret){

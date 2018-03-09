@@ -1,4 +1,5 @@
 var pool = require('../db/pool');
+var bcrypt = require('bcrypt');
 
 module.exports.listarTodos = function(callBack){
     
@@ -21,6 +22,29 @@ module.exports.listarTodos = function(callBack){
     });
 }
 
+module.exports.pegaAnalista = function(analista,callBack){
+    
+    pool.getConnection(function(err,connection){
+
+        if (err) {          
+            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
+        }           
+
+        connection.query("SELECT usuario,senha,nome,email,perfil FROM ANALISTAS WHERE usuario = ?", [analista.usuario],
+            function(err,row){
+                if(!err) {    
+                    callBack(row);                
+                }
+                connection.release();
+            }
+        );
+
+        connection.on('error', function(err) {
+            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
+        });
+    });
+}
+
 module.exports.incluir = function(analista,callBack){
 
     pool.getConnection(function(err,connection){
@@ -28,11 +52,13 @@ module.exports.incluir = function(analista,callBack){
         if (err) {
             callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
         }
+
+        var hash = bcrypt.hashSync(analista.senha,10);
         
         var qry = "INSERT INTO ANALISTAS (usuario,senha,nome,email,perfil) VALUES ?";
         var values = [[
             analista.usuario,
-            analista.senha,
+            hash,
             analista.nome,
             analista.email,
             analista.perfil
@@ -65,10 +91,12 @@ module.exports.alterar = function(analista,callBack){
         if (err) {
            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});
         }
+
+        var hash = bcrypt.hashSync(analista.senha,10);
         
         var qry = "UPDATE ANALISTAS SET senha = ?, nome = ?, email = ?, perfil = ? WHERE usuario = ?";
         var values = [            
-                analista.senha,                        
+                hash,                        
                 analista.nome,   
                 analista.email,   
                 analista.perfil,
