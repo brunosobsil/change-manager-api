@@ -19,7 +19,7 @@ router.post('/analistas', passport.authenticate('jwt',{ session: false}), functi
         res.json(ret);
     });
 
-})
+});
 
 // PUT
 router.put('/analistas', passport.authenticate('jwt',{ session: false}), function(req, res) {
