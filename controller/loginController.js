@@ -19,7 +19,8 @@ router.post('/login', function(req,res){
                     var token = jwt.sign(payload, 'senhadeteste',{
                         expiresIn: '1h'
                     });
-                    res.status(200).json({message: 'Autorizado', token: token, usuario: analista});
+                    analista.token = token;
+                    res.status(200).json({message: 'Autorizado', usuario: analista});
                 }else{
                     res.status(401).json({message: 'Nao autorizado'});
                 }
