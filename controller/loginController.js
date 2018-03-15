@@ -13,21 +13,23 @@ router.post('/login', function(req,res){
             if(rows[0]){
                 var analistaGravado = rows[0];                
                 if(bcrypt.compareSync(analista.senha, analistaGravado.senha)){
+                    analista = analistaGravado;
+                    analista.senha = '******';
                     var payload = {usuario: analista.usuario};
                     var token = jwt.sign(payload, 'senhadeteste',{
                         expiresIn: '1h'
                     });
-                    res.json({code: 200, status: 'Autorizado', token: token});
+                    res.status(200).json({message: 'Autorizado', token: token, usuario: analista});
                 }else{
-                    res.send({"code" : 401, "status" : "Nao autorizado"});    
+                    res.status(401).json({message: 'Nao autorizado'});
                 }
             }else{
-                res.send({"code" : 401, "status" : "Nao autorizado"});
+                res.status(401).json({message: 'Nao autorizado'});
             }
         });
 
     }else{
-        res.send({"code" : 401, "status" : "Nao autorizado"});
+        res.status(401).json({message: 'Nao autorizado'});
     }
 
 });

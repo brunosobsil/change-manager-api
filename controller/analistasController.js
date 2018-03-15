@@ -7,7 +7,7 @@ var passport = require('passport');
 router.get('/analistas', passport.authenticate('jwt',{ session: false}), function(req, res) {
 
     var ret = dao.listarTodos(function(ret){
-        res.json(ret);
+        res.status(200).json(ret);
     });
 
 });
@@ -16,7 +16,7 @@ router.get('/analistas', passport.authenticate('jwt',{ session: false}), functio
 router.post('/analistas', passport.authenticate('jwt',{ session: false}), function(req, res) {
 
     var ret = dao.incluir(req.body,function(ret){
-        res.json(ret);
+        res.status(201).json(ret);
     });
 
 });
@@ -25,7 +25,7 @@ router.post('/analistas', passport.authenticate('jwt',{ session: false}), functi
 router.put('/analistas', passport.authenticate('jwt',{ session: false}), function(req, res) {
 
     var ret = dao.alterar(req.body,function(ret){
-        res.json(ret);
+        res.status(200).json(ret);
     });    
 
 });
@@ -34,7 +34,7 @@ router.put('/analistas', passport.authenticate('jwt',{ session: false}), functio
 router.delete('/analistas', passport.authenticate('jwt',{ session: false}), function(req, res) {
 
     var ret = dao.excluir(req.body,function(ret){
-        res.json(ret);
+        res.status(200).json(ret);
     });
 
 });

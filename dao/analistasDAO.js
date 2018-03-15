@@ -6,7 +6,7 @@ module.exports.listarTodos = function(callBack){
     pool.getConnection(function(err,connection){
 
         if (err) {          
-            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
+            callBack({message:"Erro ao conectar a base de dados"});            
         }           
 
         connection.query("SELECT usuario,nome,email,perfil FROM ANALISTAS",function(err,rows){
@@ -17,7 +17,7 @@ module.exports.listarTodos = function(callBack){
         });
 
         connection.on('error', function(err) {
-            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
+            callBack({message:"Erro ao conectar a base de dados"});            
         });
     });
 }
@@ -27,7 +27,7 @@ module.exports.pegaAnalista = function(analista,callBack){
     pool.getConnection(function(err,connection){
 
         if (err) {          
-            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
+            callBack({message:"Erro ao conectar a base de dados"});            
         }           
 
         connection.query("SELECT usuario,senha,nome,email,perfil FROM ANALISTAS WHERE usuario = ?", [analista.usuario],
@@ -40,7 +40,7 @@ module.exports.pegaAnalista = function(analista,callBack){
         );
 
         connection.on('error', function(err) {
-            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
+            callBack({message:"Erro ao conectar a base de dados"});            
         });
     });
 }
@@ -50,7 +50,7 @@ module.exports.incluir = function(analista,callBack){
     pool.getConnection(function(err,connection){
         
         if (err) {
-            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
+            callBack({message:"Erro ao conectar a base de dados"});            
         }
 
         var hash = bcrypt.hashSync(analista.senha,10);
@@ -67,9 +67,9 @@ module.exports.incluir = function(analista,callBack){
         connection.query(qry,[values],
             function(err,result){
                 if(!err) {
-                    callBack({'code': 201, 'status': 'Registro inserido'});                    
+                    callBack({message:"Registro inserido"});                    
                 }else{
-                    callBack({'code': 500, 'status': 'Internal server error'});
+                    callBack({message:"Erro ao conectar a base de dados"});
                     console.log(err.sqlMessage);
                     console.log(err.sql);                    
                 }
@@ -78,7 +78,7 @@ module.exports.incluir = function(analista,callBack){
         );        
         
         connection.on('error', function(err) {      
-            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});            
+            callBack({message:"Erro ao conectar a base de dados"});            
         });
     });
 
@@ -89,7 +89,7 @@ module.exports.alterar = function(analista,callBack){
     pool.getConnection(function(err,connection){
         
         if (err) {
-           callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});
+           callBack({message:"Erro ao conectar a base de dados"});
         }
 
         var hash = bcrypt.hashSync(analista.senha,10);
@@ -106,9 +106,9 @@ module.exports.alterar = function(analista,callBack){
         connection.query(qry,values,
             function(err,result){
                 if(!err) {
-                    callBack({'code': 200, 'status': 'Registro alterado'});
+                    callBack({message:"Registro alterado"});
                 }else{
-                    callBack({'code': 500, 'status': 'Internal server error'});
+                    callBack({message:"Erro interno do servidor"});
                     console.log(err.sqlMessage);
                     console.log(err.sql);
                 }
@@ -117,7 +117,7 @@ module.exports.alterar = function(analista,callBack){
         );        
         
         connection.on('error', function(err) {      
-            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});
+            callBack({message:"Erro ao conectar a base de dados"});
         });
     });
 
@@ -128,7 +128,7 @@ module.exports.excluir = function(analista,callBack){
     pool.getConnection(function(err,connection){
         
         if (err) {
-           callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});
+           callBack({message:"Erro ao conectar a base de dados"});
         }
         
         var qry = "DELETE FROM ANALISTAS WHERE usuario = ?";
@@ -139,9 +139,9 @@ module.exports.excluir = function(analista,callBack){
         connection.query(qry,values,
             function(err,result){
                 if(!err) {
-                    callBack({'code': 200, 'status': 'Registro excluido'});
+                    callBack({message:"Registro excluido"});
                 }else{
-                    callBack({'code': 500, 'status': 'Internal server error'});
+                    callBack({message:"Erro interno do servidor"});
                     console.log(err.sqlMessage);
                     console.log(err.sql);
                 }
@@ -150,7 +150,7 @@ module.exports.excluir = function(analista,callBack){
         );        
         
         connection.on('error', function(err) {      
-            callBack({"code" : 100, "status" : "Erro ao conectar a base de dados"});
+            callBack({message:"Erro ao conectar a base de dados"});
         });
     });
 }
